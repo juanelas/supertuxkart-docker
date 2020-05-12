@@ -2,7 +2,7 @@
 A ready-to-use supertuxkart server compiled following the instructions in https://github.com/supertuxkart/stk-code/blob/master/NETWORKING.md using a [docker base image of Ubuntu 20.04](https://hub.docker.com/_/ubuntu).
 
 ## Usage
-You can pass arguments to supertuxkart just as ususal. For instance, in order to check all the available options:
+You can pass arguments to supertuxkart just as usual. For instance, in order to check all the available options:
 
 ```sh
 docker run --rm -it juanelas/supertuxkart --help
@@ -10,11 +10,11 @@ docker run --rm -it juanelas/supertuxkart --help
 
 ## Hosting a WAN server
 
-You are required to have an stk online account first, go [here](https://online.supertuxkart.net/register.php) for registration.
+You are required to have an STK online account first, go [here](https://online.supertuxkart.net/register.php) for registration.
 
 It is recommended you have a saved user in your computer. In order for the configuration to persist, you need to create a volume or a bind mount for the supertuxkart config directory in the container's `/root/.config/supertuxkart`. It is probably easier to bind a directory in your host machine for the config.
 
-In the following we are assuming that you bid directory `supertuxkart/config` in your user's home:
+In the following we are assuming that you bind directory `supertuxkart/config` in your user's home:
 
 ```sh
 docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart juanelas/supertuxkart --init-user --login=your_registered_name --password=your_password
@@ -39,7 +39,7 @@ Exposing udp port 2757 is also optional and enables server discovery for connect
 
 ## Hosting a local internet server
 
-Everything is basically the same as WAN one, except you don't need an stk online account. In LAN network it is required that the server and server discovery port is connectable by clients directly, so exposing the ports is not optional and you should also ensure that the forwarded ports in your hot machine are available.
+Everything is basically the same as WAN one, except you don't need an STK online account. In LAN network it is required that the server and server discovery port is connectable by clients directly, so exposing the ports is not optional and you should also ensure that the forwarded ports in your hot machine are available.
 
 If the default setup is OK for you, just do:
 
@@ -50,7 +50,8 @@ docker run --rm -it -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart  --l
 Since you probably want to tweak the setup, as with the WAN server, bind mount a directory and tweak your `server_config.xml`. In the following it is assumed that you bind directory `$HOME/supertuxkart/config` in your host machine.
 
 Edit and tune `$HOME/supertuxkart/config/config-0.10/server_config.xml`.
-> If the `config-0.10` does not exist since it is the first time you run the command, don't create it yourself. Just run the below command one and it will be created, then you can edit the file.
+
+> If the `config-0.10` does not exist since it is the first time you run the command, do not create it yourself. Just run the below command once and it will be created, then you can edit the file.
 
 Don't forget to set `wan-server` to `false` and run again with:
 
