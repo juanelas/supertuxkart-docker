@@ -58,4 +58,3 @@ Don't forget to set `wan-server` to `false` and run again with:
 ```sh
 docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart
 ```
-
