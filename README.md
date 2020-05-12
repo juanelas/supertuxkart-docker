@@ -39,7 +39,7 @@ Exposing udp port 2757 is also optional and enables server discovery for connect
 
 ## Hosting a local internet server
 
-Everything is basically the same as WAN one, except you don't need an STK online account. In LAN network it is required that the server and server discovery port is connectable by clients directly, so exposing the ports is not optional and you should also ensure that the forwarded ports in your hot machine are available.
+Everything is basically the same as WAN one, except you don't need an STK online account. In LAN network it is required that the server and server discovery port is connectable by clients directly, so exposing the ports is not optional and you should also ensure that the forwarded ports in your host machine are available.
 
 If the default setup is OK for you, just do:
 
