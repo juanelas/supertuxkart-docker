@@ -12,6 +12,7 @@ docker run --rm -it juanelas/supertuxkart --help
 
 You are required to have an STK online account first, go [here](https://online.supertuxkart.net/register.php) for registration.
 
+### Persisting configuration
 It is recommended you have a saved user in your computer. In order for the configuration to persist, you need to create a volume or a bind mount for the supertuxkart config directory in the container's `/root/.config/supertuxkart`. It is probably easier to bind a directory in your host machine for the config.
 
 In the following we are assuming that you bind directory `supertuxkart/config` in your user's home:
@@ -30,16 +31,34 @@ If login succeeded, you should see these lines among the logged ones:
 Now just edit and tune `$HOME/supertuxkart/config/config-0.10/server_config.xml`, don't forget to set `wan-server` to `true` and run again with:
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart juanelas/supertuxkart
 ```
 
-Exposing udp port 2759 is optional for a WAN server since, at the moment, STK has a list of STUN servers for NAT penetration which allows players or servers behind a firewall or router to be able to connect to each other. Exposing the port will allow your server to operate if the STUN servers do not work (or are disabled). Remember to also enable port forwarding in your router if you are behind a NAT.
+Exposing udp port 2759 is optional for a WAN server since, at the moment, STK has a list of STUN servers for NAT penetration which allows players or servers behind a firewall or router to be able to connect to each other. Exposing the port will allow your server to operate if the STUN servers do not work (or are disabled), though.
 
 Exposing udp port 2757 is also optional and enables server discovery for connecting your WAN server in LAN / localhost.
 
+The same command exposing both above ports wuold be:
+
+```sh
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart
+```
+
+Remember to also enable port forwarding in your router if you are behind a NAT.
+
+### Non-persisting configuration
+
+If you prefer not to create a volume or bind mount, you can still run your WAN server passing the necessary arguments. For example, you can host a soccer server in expert mode with:
+
+```sh
+docker run --rm -it juanelas/supertuxkart --login=your_registered_name --password=your_password --wan-server=your_server_name --network-console --mode=3 --difficulty=2
+```
+
 ## Hosting a local internet server
 
-Everything is basically the same as WAN one, except you don't need an STK online account. In LAN network it is required that the server and server discovery port is connectable by clients directly, so exposing the ports is not optional and you should also ensure that the forwarded ports in your host machine are available.
+Everything is basically the same as WAN one, except you don't need an STK online account. 
+
+Now, it is required that the server and server discovery port is connectable by clients directly, so exposing the ports is not optional and you should also ensure that the forwarded ports in your host machine are available.
 
 If the default setup is OK for you, just do:
 
@@ -47,7 +66,7 @@ If the default setup is OK for you, just do:
 docker run --rm -it -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart  --lan-server=your_server_name
 ```
 
-Since you probably want to tweak the setup, as with the WAN server, bind mount a directory and tweak your `server_config.xml`. In the following it is assumed that you bind directory `$HOME/supertuxkart/config` in your host machine.
+Since you probably want to tweak the server configuration, as with the WAN server, bind mount a directory and tweak your `server_config.xml`. In the following it is assumed that you bind directory `$HOME/supertuxkart/config` in your host machine.
 
 Edit and tune `$HOME/supertuxkart/config/config-0.10/server_config.xml`.
 
