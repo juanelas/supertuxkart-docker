@@ -1,6 +1,7 @@
 # supertuxkart-docker   <!-- omit in toc -->
 A ready-to-use supertuxkart server compiled following the instructions in https://github.com/supertuxkart/stk-code/blob/master/NETWORKING.md using a [docker base image of Ubuntu 20.04](https://hub.docker.com/_/ubuntu).
 
+- [What is SuperTuxKart?](#what-is-supertuxkart)
 - [Usage](#usage)
 - [Hosting a WAN server](#hosting-a-wan-server)
   - [WAN server with volatile configuration](#wan-server-with-volatile-configuration)
@@ -9,6 +10,14 @@ A ready-to-use supertuxkart server compiled following the instructions in https:
 - [Hosting a local internet server](#hosting-a-local-internet-server)
   - [Local internet server with volatile configuration](#local-internet-server-with-volatile-configuration)
   - [Local internet server with persisting configuration](#local-internet-server-with-persisting-configuration)
+
+## What is SuperTuxKart?
+
+[SuperTuxKart (STK)](https://supertuxkart.net) is a free and open-source kart racing game, distributed under the terms of the GNU General Public License, version 3. It features mascots of various open-source projects. SuperTuxKart is cross-platform, running on Linux, macOS, Windows, and Android systems. Version 1.1 was officially released on January 5, 2022.
+
+SuperTuxKart started as a fork of TuxKart, originally developed by Steve and Oliver Baker in 2000. When TuxKart's development ended around March 2004, a fork as SuperTuxKart was conducted by other developers in 2006. SuperTuxKart is under active development by the game's community.
+
+![logo](https://supertuxkart.net/skins/SuperTuxKart/images/logo.png)
 
 ## Usage
 You can pass arguments to supertuxkart just as usual. For instance, in order to check all the available options:
