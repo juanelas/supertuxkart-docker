@@ -281,21 +281,21 @@ docker run --rm -it -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --la
 You can also pass a configuration file with all the options to the server, although you should mount it in the container. Assuming that your file is located in `$HOME/supertuxkart/server_config.xml`, the command would be, for instance:
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/server_config.xml:/tmp/server_config.xml juanelas/supertuxkart -p 2757:2757/udp -p 2759:2759/udp --server-config=/tmp/server_config.xml
+docker run --rm -it -v $HOME/supertuxkart/server_config.xml:/tmp/server_config.xml juanelas/supertuxkart -p 2757:2757/udp -p 2759:2759/udp --server-config=/tmp/server_config.xml --lan-server=your_server_name
 ```
 
-A reference `server_config.xml` configuration file for a WAN server is detailed in section ***. As a base reference, just change `wan-server` to `false` for a local internet one.
+You can use, as a reference, the same `server_config.xml` configuration file for a WAN server. 
 
 ### Local internet server with persisting configuration
 
 As with the WAN server, bind mount a directory and tweak your `server_config.xml`. In the following it is assumed that you bind directory `$HOME/supertuxkart/config` in your host machine.
 
-Edit and tweak `$HOME/supertuxkart/config/config-0.10/server_config.xml`. Check that `wan-server` is set to `false` and enable (if desired) the advanced management by setting `sql-management` to `true`. 
+Edit and tweak `$HOME/supertuxkart/config/config-0.10/server_config.xml`. 
 
 > If the `config-0.10` does not exist since it is the first time you run the command, do not create it yourself. Just run the below command once and it will be created, then you can edit the file.
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --lan-server=your_server_name
 ```
 
 If you want to be able to switch between different accounts, please read the instructions for the [WAN Server](#wan-server-wit-persisting-configuration).
