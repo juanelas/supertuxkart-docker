@@ -247,7 +247,7 @@ docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart juan
 You can also create different configuration files in `$HOME/supertuxkart/config/config-0.10/` and switch to other one passing the `--server-config=file` option. For example, if you create a file `$HOME/supertuxkart/config/config-0.10/wan_server.xml`, you could use that file with:
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart juanelas/supertuxkart --server-config=/root/.config/supertuxkart/config-0.10/wan_config.xml
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart juanelas/supertuxkart --server-config=/root/.config/supertuxkart/config-0.10/wan_server.xml
 ```
 
 > Although the server config file could be anywhere, in practice SQL management will only work if it is placed in the standard config dir `/root/.config/supertuxkart/config-0.10/`, which holds the SQLite3 database.
@@ -261,10 +261,10 @@ However, exposing udp port 2759 will allow your server to operate if the STUN se
 An example command exposing both above ports would be:
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --public-server
 ```
 
-Remember to also enable port forwarding in your router if you are behind a NAT.
+Remember also to allow access to both ports in your host firewall (if any) and to set up port forwarding in your router if you are behind a NAT.
 
 ## Hosting a local internet server
 
