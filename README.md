@@ -1,5 +1,14 @@
-# supertuxkart-docker
+# supertuxkart-docker   <!-- omit in toc -->
 A ready-to-use supertuxkart server compiled following the instructions in https://github.com/supertuxkart/stk-code/blob/master/NETWORKING.md using a [docker base image of Ubuntu 20.04](https://hub.docker.com/_/ubuntu).
+
+- [Usage](#usage)
+- [Hosting a WAN server](#hosting-a-wan-server)
+  - [WAN server with volatile configuration](#wan-server-with-volatile-configuration)
+  - [WAN server wit persisting configuration](#wan-server-wit-persisting-configuration)
+  - [Optional WAN server ports](#optional-wan-server-ports)
+- [Hosting a local internet server](#hosting-a-local-internet-server)
+  - [Local internet server with volatile configuration](#local-internet-server-with-volatile-configuration)
+  - [Local internet server with persisting configuration](#local-internet-server-with-persisting-configuration)
 
 ## Usage
 You can pass arguments to supertuxkart just as usual. For instance, in order to check all the available options:
@@ -280,4 +289,4 @@ Edit and tweak `$HOME/supertuxkart/config/config-0.10/server_config.xml`. Check 
 docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart
 ```
 
-If you want to be able to switch between different accounts, please read the instructions for the WAN Server.
+If you want to be able to switch between different accounts, please read the instructions for the [WAN Server](#wan-server-wit-persisting-configuration).
