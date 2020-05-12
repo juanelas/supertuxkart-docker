@@ -266,16 +266,16 @@ Everything is basically the same as for the WAN one, except that you don't need 
 You can run your local internet server just passing the necessary arguments. For example, you can host a soccer server in expert mode with:
 
 ```sh
-docker run --rm -it juanelas/supertuxkart --lan-server=your_server_name --mode=3 --difficulty=2 --network-console
+docker run --rm -it -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --lan-server=your_server_name --mode=3 --difficulty=2 --network-console
 ```
 
 You can also pass a configuration file with all the options to the server, although you should mount it in the container. Assuming that your file is located in `$HOME/supertuxkart/server_config.xml`, the command would be, for instance:
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/server_config.xml:/tmp/server_config.xml juanelas/supertuxkart --login=your_registered_name --password=your_password --server-config=/tmp/server_config.xml
+docker run --rm -it -v $HOME/supertuxkart/server_config.xml:/tmp/server_config.xml juanelas/supertuxkart -p 2757:2757/udp -p 2759:2759/udp --server-config=/tmp/server_config.xml
 ```
 
-A reference `server_config.xml` configuration file for a WAN server is detailed in section ***. As a base reference, just change `wan-server` to `false`.
+A reference `server_config.xml` configuration file for a WAN server is detailed in section ***. As a base reference, just change `wan-server` to `false` for a local internet one.
 
 ### Local internet server with persisting configuration
 
