@@ -4,7 +4,7 @@ A ready-to-use supertuxkart server compiled following the instructions in https:
 - [Usage](#usage)
 - [Hosting a WAN server](#hosting-a-wan-server)
   - [WAN server with volatile configuration](#wan-server-with-volatile-configuration)
-  - [WAN server wit persisting configuration](#wan-server-wit-persisting-configuration)
+  - [WAN server with persisting configuration](#wan-server-with-persisting-configuration)
   - [Optional WAN server ports](#optional-wan-server-ports)
 - [Hosting a local internet server](#hosting-a-local-internet-server)
   - [Local internet server with volatile configuration](#local-internet-server-with-volatile-configuration)
@@ -208,7 +208,7 @@ A reference `server_config.xml` configuration file for a WAN server would be:
 ```
 
 
-### WAN server wit persisting configuration
+### WAN server with persisting configuration
 
 Among other advantages, a persisting configuration enables: 1) storing your credentials (your token) so that you don't need to write them every time you invoke the supertuxkart server; and 2) make use of the integrated SQLite database management.
 
