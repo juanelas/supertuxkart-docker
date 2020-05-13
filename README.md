@@ -284,7 +284,7 @@ You can also pass a configuration file with all the options to the server, altho
 docker run --rm -it -v $HOME/supertuxkart/server_config.xml:/tmp/server_config.xml juanelas/supertuxkart -p 2757:2757/udp -p 2759:2759/udp --server-config=/tmp/server_config.xml --lan-server=your_server_name
 ```
 
-You can use, as a reference, the same `server_config.xml` configuration file for a WAN server. 
+You can use, as a reference, the same `server_config.xml` configuration file for a [WAN server](#wan-server-with-volatile-configuration). 
 
 ### Local internet server with persisting configuration
 
@@ -298,4 +298,4 @@ Edit and tweak `$HOME/supertuxkart/config/config-0.10/server_config.xml`.
 docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --lan-server=your_server_name
 ```
 
-If you want to be able to switch between different accounts, please read the instructions for the [WAN Server](#wan-server-wit-persisting-configuration).
+If you want to be able to switch between different accounts, please read the instructions for the [WAN Server](#wan-server-with-persisting-configuration).
