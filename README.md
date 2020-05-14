@@ -26,6 +26,7 @@ You can pass arguments to supertuxkart just as usual. For instance, in order to 
 docker run --rm -it juanelas/supertuxkart --help
 ```
 
+
 ## Hosting a WAN server
 
 You are required to have an STK online account first, go [here](https://online.supertuxkart.net/register.php) for registration.
@@ -219,16 +220,20 @@ A reference `server_config.xml` configuration file for a WAN server would be:
 
 ### WAN server with persisting configuration
 
-Among other advantages, a persisting configuration enables: 1) storing your credentials (your token) so that you don't need to write them every time you invoke the supertuxkart server; and 2) make use of the integrated SQLite database management.
+Among other advantages, a persisting configuration enables: 1) storing your credentials (your token) so that you don't need to write them every time you invoke the supertuxkart server; 2) make use of the integrated SQLite database management; 3) install extra addons (karts, tracks, arenas) from https://online.supertuxkart.net/.
 
-In order for the configuration to persist, you need to create a volume or a bind mount for the supertuxkart config directory in the container's `/root/.config/supertuxkart`. It is probably easier to bind a directory in your host machine for the config.
+In order for the configuration to persist, you can create the following named volumes or bind mounts:
+ - One for the containers' supertuxkart config directory in `/root/.config/supertuxkart/config-0.10`, where the credentials, config files and the sqllite3 database `stkservers.db` are stored.
+ - Another one for the addons in `/root/.local/share/supertuxkart/addons/`.
 
-In the following we are assuming that you bind directory `supertuxkart/config` in your user's home.
+It is probably easier to bind a directory in your host machine for the config.
 
-First run the following to log in STK.
+In the following we are assuming that you bind directories `$HOME/supertuxkart/config` and `$HOME/supertuxkart/addons`
+
+First run the following to log in STK (replacing `your_login_name` and `your_password` with your actual registered login name and password))
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart juanelas/supertuxkart --init-user --login=your_registered_name --password=your_password
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart/config-0.10 -v $HOME/supertuxkart/addons:/root/.local/share/supertuxkart/addons juanelas/supertuxkart --init-user --login=your_registered_name --password=your_password
 ```
 
 If login succeeded, you should see these lines among the logged ones:
@@ -241,16 +246,16 @@ If login succeeded, you should see these lines among the logged ones:
 Now just edit and tune `$HOME/supertuxkart/config/config-0.10/server_config.xml`. Check that `wan-server` is set to `true` and enable (if desired) the advanced management by setting `sql-management` to `true`. Now run again with:
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart juanelas/supertuxkart
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart/config-0.10 -v $HOME/supertuxkart/addons:/root/.local/share/supertuxkart/addons juanelas/supertuxkart
 ```
 
-You can also create different configuration files in `$HOME/supertuxkart/config/config-0.10/` and switch to other one passing the `--server-config=file` option. For example, if you create a file `$HOME/supertuxkart/config/config-0.10/wan_server.xml`, you could use that file with:
+You can also create different configuration files in `$HOME/supertuxkart/config/` and switch to other one passing the `--server-config=file` option. For example, if you create a file `$HOME/supertuxkart/config/wan_server.xml`, you could use that file with:
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart juanelas/supertuxkart --server-config=/root/.config/supertuxkart/config-0.10/wan_server.xml
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart/config-0.10 -v $HOME/supertuxkart/addons:/root/.local/share/supertuxkart/addons juanelas/supertuxkart --server-config=/root/.config/supertuxkart/config-0.10/wan_server.xml
 ```
 
-> Although the server config file could be anywhere, in practice SQL management will only work if it is placed in the standard config dir `/root/.config/supertuxkart/config-0.10/`, which holds the SQLite3 database.
+> Although the server config file could be run from any path, in practice SQL management will only work if the file is placed in the standard config dir `/root/.config/supertuxkart/config-0.10/`, which holds the SQLite3 database.
 
 ### Optional WAN server ports
 
@@ -261,7 +266,7 @@ However, exposing udp port 2759 will allow your server to operate if the STUN se
 An example command exposing both above ports would be:
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --public-server
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart/config-0.10 -v $HOME/supertuxkart/addons:/root/.local/share/supertuxkart/addons -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --public-server
 ```
 
 Remember also to allow access to both ports in your host firewall (if any) and to set up port forwarding in your router if you are behind a NAT.
@@ -288,14 +293,14 @@ You can use, as a reference, the same `server_config.xml` configuration file for
 
 ### Local internet server with persisting configuration
 
-As with the WAN server, bind mount a directory and tweak your `server_config.xml`. In the following it is assumed that you bind directory `$HOME/supertuxkart/config` in your host machine.
+As with the [WAN Server](#wan-server-with-persisting-configuration), in the following it is assumed that you bind mount directories `$HOME/supertuxkart/config` and `$HOME/supertuxkart/addons` in your host machine.
 
-Edit and tweak `$HOME/supertuxkart/config/config-0.10/server_config.xml`. 
+Edit and tweak `$HOME/supertuxkart/config/server_config.xml`. 
 
-> If the `config-0.10` does not exist since it is the first time you run the command, do not create it yourself. Just run the below command once and it will be created, then you can edit the file.
+> If server_config.xml does not exist yet, you do not need to create it yourself, just run the below command once and it will be created, then you can edit the file.
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --lan-server=your_server_name
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart/config-0.10 -v $HOME/supertuxkart/addons:/root/.local/share/supertuxkart/addons -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --lan-server=your_server_name
 ```
 
 If you want to be able to switch between different accounts, please read the instructions for the [WAN Server](#wan-server-with-persisting-configuration).
