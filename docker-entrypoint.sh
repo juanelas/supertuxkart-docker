@@ -1,8 +1,5 @@
 #!/bin/bash
-if [ ! -d "/root/.config/supertuxkart/config-0.10" ]; then
-    echo "First run. Initializing"
-    supertuxkart --init-user
-    cd /root/.config/supertuxkart/config-0.10 && \
-    touch stkservers.db
+if [ ! -f "/root/.config/supertuxkart/config-0.10/stkservers.db" ]; then
+    touch /root/.config/supertuxkart/config-0.10/stkservers.db
 fi
 /usr/local/bin/supertuxkart $@

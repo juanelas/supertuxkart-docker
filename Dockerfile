@@ -32,7 +32,7 @@ RUN apt-get update && \
     cd / && \
     rm -rf /src && \
     mkdir -p /root/.local/share/supertuxkart && \
-    mkdir -p /root/.config/supertuxkart && \
+    mkdir -p /root/.config/supertuxkart/config-0.10 && \
     mkdir -p /root/.cache/supertuxkart
 
 COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
