@@ -13,7 +13,7 @@ A ready-to-use supertuxkart server compiled following the instructions in https:
 
 ## What is SuperTuxKart?
 
-[SuperTuxKart (STK)](https://supertuxkart.net) is a free and open-source kart racing game, distributed under the terms of the GNU General Public License, version 3. It features mascots of various open-source projects. SuperTuxKart is cross-platform, running on Linux, macOS, Windows, and Android systems. Version 1.1 was officially released on January 5, 2022.
+[SuperTuxKart (STK)](https://supertuxkart.net) is a free and open-source kart racing game, distributed under the terms of the GNU General Public License, version 3. It features mascots of various open-source projects. SuperTuxKart is cross-platform, running on Linux, macOS, Windows, and Android systems.
 
 SuperTuxKart started as a fork of TuxKart, originally developed by Steve and Oliver Baker in 2000. When TuxKart's development ended around March 2004, a fork as SuperTuxKart was conducted by other developers in 2006. SuperTuxKart is under active development by the game's community.
 
