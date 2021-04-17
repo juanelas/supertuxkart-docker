@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ ! -f "/root/.config/supertuxkart/config-0.10/stkservers.db" ]; then
-    touch /root/.config/supertuxkart/config-0.10/stkservers.db
-fi
-/usr/local/bin/supertuxkart $@
+if [ -n ${USERNAME} -a -n ${PASSWORD} ]; then
+    supertuxkart --init-user --login=${USERNAME} --password=${PASSWORD}
+fi &&
+/usr/local/bin/supertuxkart --server-config=server_config.xml $@

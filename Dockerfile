@@ -1,39 +1,41 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.04 AS build
+LABEL maintainer=juanelas
+WORKDIR /stk
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends build-essential ca-certificates cmake git libcurl4-openssl-dev libenet-dev libsqlite3-dev libssl-dev subversion pkg-config zlib1g-dev \
-    libcurl4 libsqlite3-0 && \
-    mkdir /src && \
-    cd /src && \
-    git clone https://github.com/supertuxkart/stk-code stk-code && \
-    for i in `/usr/bin/seq 1 100`; do \
-        svn co https://svn.code.sf.net/p/supertuxkart/code/stk-assets stk-assets; \
-        if [ $? -eq 0 ]; then \
-            break; \
-        else \
-            echo "[$i] reconnecting to SVN"; \
-            svn cleanup stk-assets; \
-        fi; \
-    done && \
-    if [ "$i" -eq "100" ]; then \
-        echo "too many retries for SVN checkout" 1>&2; \
-        exit 1; \
-    fi && \ 
-    cd stk-code && \ 
-    mkdir cmake_build && \
-    cd cmake_build && \
-    cmake .. -DSERVER_ONLY=ON -DBUILD_RECORDER=off && \
-    make && \
-    make install && \
-    DEBIAN_FRONTEND=noninteractive apt-get purge -yq build-essential ca-certificates cmake git libcurl4-openssl-dev libenet-dev libsqlite3-dev libssl-dev subversion pkg-config zlib1g-dev && \
-    DEBIAN_FRONTEND=noninteractive apt-get -yq autoremove --purge && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    cd / && \
-    rm -rf /src && \
-    mkdir -p /root/.local/share/supertuxkart && \
-    mkdir -p /root/.config/supertuxkart/config-0.10 && \
-    mkdir -p /root/.cache/supertuxkart
+ENV STK_VERSION=1.1
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update && \
+    apt install -y --no-install-recommends build-essential \
+                       cmake \
+                       git \
+                       libcurl4-openssl-dev \
+                       libenet-dev \
+                       libssl-dev \
+                       libsqlite3-dev \
+                       pkg-config \
+                       subversion \
+                       zlib1g-dev \
+                       ca-certificates
+
+# Using releases to make builds reproducible
+RUN git clone -b ${STK_VERSION} --depth=1 https://github.com/supertuxkart/stk-code.git
+RUN svn checkout https://svn.code.sf.net/p/supertuxkart/code/stk-assets-release/${STK_VERSION}/ stk-assets
+
+RUN mkdir stk-code/cmake_build && \ 
+    cd stk-code/cmake_build && \
+    cmake .. -DSERVER_ONLY=ON -DBUILD_RECORDER=off -USE_SYSTEM_ENET=ON && \
+    make -j$(nproc) && \
+    make install
+
+FROM ubuntu:20.04
+LABEL maintainer=juanelas
+WORKDIR /stk
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update && \
+    apt install -y libcurl4-openssl-dev && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 

@@ -43,7 +43,7 @@ docker run --rm -it juanelas/supertuxkart --login=your_login_name --password=you
 You can also pass a configuration file with all the options to the server, although you should mount it in the container. Assuming that your file is located in `$HOME/supertuxkart/server_config.xml`, the command would be, for instance:
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/server_config.xml:/tmp/server_config.xml juanelas/supertuxkart --login=your_registered_name --password=your_password --server-config=/tmp/server_config.xml
+docker run --rm -it -v $HOME/supertuxkart/server_config.xml:/stk/server_config.xml juanelas/supertuxkart --login=your_registered_name --password=your_password --server-config=/stk/server_config.xml
 ```
 
 A reference `server_config.xml` configuration file for a WAN server would be:
