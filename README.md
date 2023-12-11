@@ -1,6 +1,6 @@
 # supertuxkart-docker   <!-- omit in toc -->
 
-A ready-to-use supertuxkart server compiled following the instructions in <https://github.com/supertuxkart/stk-code/blob/master/NETWORKING.md> using a [docker base image of Ubuntu 20.04](https://hub.docker.com/_/ubuntu).
+A ready-to-use supertuxkart server compiled following the instructions in <https://github.com/supertuxkart/stk-code/blob/master/NETWORKING.md> using a [docker base image of Ubuntu 22.04](https://hub.docker.com/_/ubuntu).
 
 - [1. What is SuperTuxKart?](#1-what-is-supertuxkart)
 - [2. Usage](#2-usage)
