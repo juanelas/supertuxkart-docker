@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends build-essential ca-certificates cmake git libcurl4-openssl-dev libenet-dev libsqlite3-dev libssl-dev subversion pkg-config zlib1g-dev \
@@ -22,19 +22,18 @@ RUN apt-get update && \
     cd stk-code && \ 
     mkdir cmake_build && \
     cd cmake_build && \
-    cmake .. -DSERVER_ONLY=ON -DBUILD_RECORDER=off && \
+    cmake .. -DSERVER_ONLY=ON -DBUILD_RECORDER=off -DCMAKE_INSTALL_PREFIX=/stk && \
     make && \
-    make install && \
-    DEBIAN_FRONTEND=noninteractive apt-get purge -yq build-essential ca-certificates cmake git libcurl4-openssl-dev libenet-dev libsqlite3-dev libssl-dev subversion pkg-config zlib1g-dev && \
-    DEBIAN_FRONTEND=noninteractive apt-get -yq autoremove --purge && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    cd / && \
-    rm -rf /src && \
-    mkdir -p /root/.local/share/supertuxkart && \
-    mkdir -p /root/.config/supertuxkart/config-0.10 && \
-    mkdir -p /root/.cache/supertuxkart
+    make install
 
+FROM ubuntu:22.04
+COPY --from=0 /stk /stk
 COPY ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-
+VOLUME /root/.config/supertuxkart/config-0.10
+EXPOSE 2757/udp
+EXPOSE 2759/udp
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
+        libcurl4 \
+        libsqlite3-0
 ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]

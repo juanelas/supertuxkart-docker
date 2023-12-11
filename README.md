@@ -1,17 +1,18 @@
 # supertuxkart-docker   <!-- omit in toc -->
-A ready-to-use supertuxkart server compiled following the instructions in https://github.com/supertuxkart/stk-code/blob/master/NETWORKING.md using a [docker base image of Ubuntu 20.04](https://hub.docker.com/_/ubuntu).
 
-- [What is SuperTuxKart?](#what-is-supertuxkart)
-- [Usage](#usage)
-- [Hosting a WAN server](#hosting-a-wan-server)
-  - [WAN server with volatile configuration](#wan-server-with-volatile-configuration)
-  - [WAN server with persisting configuration](#wan-server-with-persisting-configuration)
-  - [Optional WAN server ports](#optional-wan-server-ports)
-- [Hosting a local internet server](#hosting-a-local-internet-server)
-  - [Local internet server with volatile configuration](#local-internet-server-with-volatile-configuration)
-  - [Local internet server with persisting configuration](#local-internet-server-with-persisting-configuration)
+A ready-to-use supertuxkart server compiled following the instructions in <https://github.com/supertuxkart/stk-code/blob/master/NETWORKING.md> using a [docker base image of Ubuntu 20.04](https://hub.docker.com/_/ubuntu).
 
-## What is SuperTuxKart?
+- [1. What is SuperTuxKart?](#1-what-is-supertuxkart)
+- [2. Usage](#2-usage)
+- [3. Hosting a WAN server](#3-hosting-a-wan-server)
+  - [3.1. WAN server with volatile configuration](#31-wan-server-with-volatile-configuration)
+  - [3.2. WAN server with persisting configuration](#32-wan-server-with-persisting-configuration)
+  - [3.3. Optional WAN server ports](#33-optional-wan-server-ports)
+- [4. Hosting a local internet server](#4-hosting-a-local-internet-server)
+  - [4.1. Local internet server with volatile configuration](#41-local-internet-server-with-volatile-configuration)
+  - [4.2. Local internet server with persisting configuration](#42-local-internet-server-with-persisting-configuration)
+
+## 1. What is SuperTuxKart?
 
 [SuperTuxKart (STK)](https://supertuxkart.net) is a free and open-source kart racing game, distributed under the terms of the GNU General Public License, version 3. It features mascots of various open-source projects. SuperTuxKart is cross-platform, running on Linux, macOS, Windows, and Android systems.
 
@@ -19,25 +20,24 @@ SuperTuxKart started as a fork of TuxKart, originally developed by Steve and Oli
 
 ![logo](https://supertuxkart.net/skins/SuperTuxKart/images/logo.png)
 
-## Usage
+## 2. Usage
+
 You can pass arguments to supertuxkart just as usual. For instance, in order to check all the available options:
 
 ```sh
 docker run --rm -it juanelas/supertuxkart --help
 ```
 
-
-## Hosting a WAN server
+## 3. Hosting a WAN server
 
 You are required to have an STK online account first, go [here](https://online.supertuxkart.net/register.php) for registration.
 
-
-### WAN server with volatile configuration
+### 3.1. WAN server with volatile configuration
 
 You can run your WAN server just passing the necessary arguments. For example, you can host a soccer server in expert mode with (substitute `your_login_name` and `your_password` with your actual registered login name and password):
 
 ```sh
-docker run --rm -it juanelas/supertuxkart --login=your_login_name --password=your_password --wan-server=your_server_name --mode=3 --difficulty=2 --network-console
+docker run --rm -it juanelas/supertuxkart --login=your_login_name --password=your_password --wan-server=your_server_name --mode=3 --difficulty=2
 ```
 
 You can also pass a configuration file with all the options to the server, although you should mount it in the container. Assuming that your file is located in `$HOME/supertuxkart/server_config.xml`, the command would be, for instance:
@@ -217,14 +217,14 @@ A reference `server_config.xml` configuration file for a WAN server would be:
 </server-config>
 ```
 
+### 3.2. WAN server with persisting configuration
 
-### WAN server with persisting configuration
-
-Among other advantages, a persisting configuration enables: 1) storing your credentials (your token) so that you don't need to write them every time you invoke the supertuxkart server; 2) make use of the integrated SQLite database management; 3) install extra addons (karts, tracks, arenas) from https://online.supertuxkart.net/.
+Among other advantages, a persisting configuration enables: 1) storing your credentials (your token) so that you don't need to write them every time you invoke the supertuxkart server; 2) make use of the integrated SQLite database management; 3) install extra addons (karts, tracks, arenas) from <https://online.supertuxkart.net/>.
 
 In order for the configuration to persist, you can create the following named volumes or bind mounts:
- - One for the containers' supertuxkart config directory in `/root/.config/supertuxkart/config-0.10`, where the credentials, config files and the sqllite3 database `stkservers.db` are stored.
- - Another one for the addons in `/root/.local/share/supertuxkart/addons/`.
+
+- One for the containers' supertuxkart config directory in `/root/.config/supertuxkart/config-0.10`, where the credentials, config files and the sqllite3 database `stkservers.db` are stored.
+- Another one for the addons in `/root/.local/share/supertuxkart/addons/`.
 
 It is probably easier to bind a directory in your host machine for the config.
 
@@ -257,50 +257,50 @@ docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart/conf
 
 > Although the server config file could be run from any path, in practice SQL management will only work if the file is placed in the standard config dir `/root/.config/supertuxkart/config-0.10/`, which holds the SQLite3 database.
 
-### Optional WAN server ports
+### 3.3. Optional WAN server ports
 
 At the moment, STK has a list of STUN servers for NAT penetration which allows players or servers behind a firewall or router to be able to connect to each other. That is to say that no specific port needs to be exposed.
 
 However, exposing udp port 2759 will allow your server to operate if the STUN servers do not work (or are disabled in your configuration). Moreover, exposing udp port 2757 enables server discovery of your WAN server from your LAN / localhost.
 
-An example command exposing both above ports would be:
+An example command exposing both above ports would be (`-P` publishes all esposed ports):
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart/config-0.10 -v $HOME/supertuxkart/addons:/root/.local/share/supertuxkart/addons -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --public-server
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart/config-0.10 -v $HOME/supertuxkart/addons:/root/.local/share/supertuxkart/addons -P juanelas/supertuxkart --public-server
 ```
 
 Remember also to allow access to both ports in your host firewall (if any) and to set up port forwarding in your router if you are behind a NAT.
 
-## Hosting a local internet server
+## 4. Hosting a local internet server
 
 Everything is basically the same as for the WAN one, except that you don't need an STK online account. Moreover, now it is required that your server be discoverable and connectable by clients directly. As a result you must expose udp port 2757 (server discovery) and udp port 2759 (supertuxkart). Remember also to allow access in your host firewall (if any) to both ports and to set up port forwarding in your router if you are behind a NAT and want to allow access to clients outside your LAN.
 
-### Local internet server with volatile configuration
+### 4.1. Local internet server with volatile configuration
 
 You can run your local internet server just passing the necessary arguments. For example, you can host a soccer server in expert mode with:
 
 ```sh
-docker run --rm -it -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --lan-server=your_server_name --mode=3 --difficulty=2 --network-console
+docker run --rm -it -P juanelas/supertuxkart --lan-server=your_server_name --mode=3 --difficulty=2
 ```
 
 You can also pass a configuration file with all the options to the server, although you should mount it in the container. Assuming that your file is located in `$HOME/supertuxkart/server_config.xml`, the command would be, for instance:
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/server_config.xml:/tmp/server_config.xml juanelas/supertuxkart -p 2757:2757/udp -p 2759:2759/udp --server-config=/tmp/server_config.xml --lan-server=your_server_name
+docker run --rm -it -v $HOME/supertuxkart/server_config.xml:/tmp/server_config.xml juanelas/supertuxkart -P --server-config=/tmp/server_config.xml --lan-server=your_server_name
 ```
 
-You can use, as a reference, the same `server_config.xml` configuration file for a [WAN server](#wan-server-with-volatile-configuration). 
+You can use, as a reference, the same `server_config.xml` configuration file for a [WAN server](#wan-server-with-volatile-configuration).
 
-### Local internet server with persisting configuration
+### 4.2. Local internet server with persisting configuration
 
 As with the [WAN Server](#wan-server-with-persisting-configuration), in the following it is assumed that you bind mount directories `$HOME/supertuxkart/config` and `$HOME/supertuxkart/addons` in your host machine.
 
-Edit and tweak `$HOME/supertuxkart/config/server_config.xml`. 
+Edit and tweak `$HOME/supertuxkart/config/server_config.xml`.
 
 > If server_config.xml does not exist yet, you do not need to create it yourself, just run the below command once and it will be created, then you can edit the file.
 
 ```sh
-docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart/config-0.10 -v $HOME/supertuxkart/addons:/root/.local/share/supertuxkart/addons -p 2757:2757/udp -p 2759:2759/udp juanelas/supertuxkart --lan-server=your_server_name
+docker run --rm -it -v $HOME/supertuxkart/config:/root/.config/supertuxkart/config-0.10 -v $HOME/supertuxkart/addons:/root/.local/share/supertuxkart/addons -P juanelas/supertuxkart --lan-server=your_server_name
 ```
 
 If you want to be able to switch between different accounts, please read the instructions for the [WAN Server](#wan-server-with-persisting-configuration).
